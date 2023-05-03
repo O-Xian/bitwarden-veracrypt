@@ -6,7 +6,7 @@ Mount an encrypted VeraCrypt volume with parameters loaded from a Bitwarden serv
 Connect to a Bitwarden server, retrieve the volume item, extract password and other parameters.
 Mount the volume with VeraCrypt.
 
-You MUST set some variables in the script:
+You MUST set some variables in the script OR pass them on the command line:
 - $veracryptBinary: full path to VeraCrypt.exe (filename included)
 - $pwdFile: full path (filename included) to a text file containing only your Bitwarden master password
 - $itemId: Bitwarden-assigned ID for your volume item
@@ -19,7 +19,7 @@ They can be set directly into the script with $env:BW_CLIENTID and $env:BW_CLIEN
 You MUST first initialize the script by specifying the Bitwarden URL to use with the -server parameter (see example 2 below).
 
 .INPUTS
--server <string> may be provided from the pipeline.
+None.
 
 .OUTPUTS
 None.
@@ -31,32 +31,45 @@ PS> .\vs.ps1
 PS> .\vs.ps1 -server https://bitwarden.domain.tld
 
 .EXAMPLE
+PS> .\vs.ps1 -itemId 00000000-1111-2222-3333-444444444444 -veracryptBinary "C:\Program Files\VeraCrypt\VeraCrypt.exe"			 
+
+.EXAMPLE
 PS> .\vs.ps1 -help
 #>
 param(
-	[Parameter(Mandatory=$false, ValueFromPipeline=$true)]
+	[Parameter(Mandatory=$false)]
 	[string]
 	# Specifies the Bitwarden server to use. Optional.
 	$server,
+	
+	[Parameter(Mandatory=$false)]
+	[string]
+	# Specifies the item ID in Bitwarden vault to fetch
+	$itemId="CHANGE ME TO DEFAULT VALUE",
+	
+	[Parameter(Mandatory=$false)]
+	[string]
+	# Specifies the full path to Bitwarden master password file
+	$pwdFile="CHANGE ME TO DEFAULT VALUE",
+	
+	[Parameter(Mandatory=$false)]
+	[string]
+	# Specifies the full path to VeraCrypt.exe binary
+	$veracryptBinary="CHANGE ME TO DEFAULT VALUE",
 	
 	# Displays help message.
 	[switch]$help
 )
 
 if ($help) {
-	echo '.\vc.ps1'
+	echo '.\vc.ps1 [-server <server URL>] [-itemId <id>] [-pwdFile <path\to\pwd\file>] [-veracryptBinary <path\to\veracrypt.exe>]'
 	echo '    Mount the volume'
-	echo ''
-	echo '.\vc.ps1 -server https://bitwarden.domain.tld'
-	echo '    Set the Bitwarden server to the provided URL and then mount the volume'
 	Exit 0
 }
 
-$veracryptBinary="C:\Program Files\VeraCrypt\VeraCrypt.exe"
+
 $env:BW_CLIENTID="user.CHANGEME"
 $env:BW_CLIENTSECRET="CHANGEME"
-$pwdFile="CHANGEME"
-$itemId="CHANGEME"
 
 #########
 # Is the user trying to change the Bitwarden server?
