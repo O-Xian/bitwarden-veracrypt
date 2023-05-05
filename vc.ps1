@@ -7,7 +7,7 @@ Connect to a Bitwarden server, retrieve the volume item, extract password and ot
 Mount the volume with VeraCrypt.
 
 You MUST set some variables in the script OR pass them on the command line:
-- $veracryptBinary: full path to VeraCrypt.exe (filename included)
+- $veracryptBinary: full path to VeraCrypt.exe (filename included), or only the binary name if in your PATH
 - $pwdFile: full path (filename included) to a text file containing only your Bitwarden master password (only in non-interactive mode)
 - $itemId: Bitwarden-assigned ID for your volume item
 
@@ -25,6 +25,8 @@ Parameters for VeraCrypt are extracted from the Custom Fields in Bitwarden item.
 - "Container Path": full path of the encrypted container
 - "Mount Drive": drive letter to mount the container as (no : after, can be lower or upper case)
 - "Hash": [sha256|sha-256|sha512|sha-512|whirlpool|ripemd160|ripemd-160]the hash method passed as the /hash parameter
+
+jq (https://stedolan.github.io/jq/) MUST be installed and included in your PATH.
 
 .INPUTS
 None.
