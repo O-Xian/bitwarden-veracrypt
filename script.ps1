@@ -21,6 +21,11 @@ In interactive mode, you will be prompted by Bitwarden for your email address an
 
 You MUST first initialize the script by specifying the Bitwarden URL to use with the -server parameter (see example 2 below).
 
+Parameters for VeraCrypt are extracted from the Custom Fields in Bitwarden item. Script will look for fields named:
+- "Container Path": full path of the encrypted container
+- "Mount Drive": drive letter to mount the container as (no : after, can be lower or upper case)
+- "Hash": [sha256|sha-256|sha512|sha-512|whirlpool|ripemd160|ripemd-160]the hash method passed as the /hash parameter
+
 .INPUTS
 None.
 
@@ -67,7 +72,7 @@ param(
 	[Parameter(Mandatory=$false)]
 	[string]
 	# Specifies the full path to VeraCrypt.exe binary
-	$veracryptBinary="C:\Program Files\VeraCrypt\VeraCrypt.exe", #CHANGEME
+	$veracryptBinary="CHANGEME",
 	
 	# Displays help message.
 	[switch]$help
@@ -87,7 +92,7 @@ if ($help) {
 }
 
 if (-Not $interactive) {
-	$env:BW_CLIENTID="user.CHANGME"
+	$env:BW_CLIENTID="user.CHANGEME"
 	$env:BW_CLIENTSECRET="CHANGEME"
 }
 
@@ -136,14 +141,12 @@ if (-Not $interactive) {
 # Process the values
 #########
 Write-Progress -Id 2 -Activity 'Processing the retrieved item' -Status 'Progress:' -PercentComplete 75
-$vcFile=$item | jq.exe '.fields[0] | .value'
-$vcDrive=$item | jq.exe '.fields[1] | .value'
-$vcPkcs=$item | jq.exe '.fields[2] | .value'
-$vcHash=$item | jq.exe '.fields[3] | .value'
+
+$vcFile=$item | jq.exe ".fields[] | select(.name == \`"Container Path\`") | .value"
+$vcDrive=$item | jq.exe ".fields[] | select(.name == \`"Mount Drive\`") | .value"
+$vcHash=$item | jq.exe ".fields[] | select(.name == \`"Hash\`") | .value"
 
 $vcFile=$vcFile.replace("\\", "\")
-
-
 
 #########
 # Mount the volume
