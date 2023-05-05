@@ -33,19 +33,19 @@ None.
 None.
 
 .EXAMPLE
-PS> .\vs.ps1
+PS> .\vc.ps1
 
 .EXAMPLE
-PS> .\vs.ps1 -server https://bitwarden.domain.tld
+PS> .\vc.ps1 -server https://bitwarden.domain.tld
 
 .EXAMPLE
-PS> .\vs.ps1 -itemId 00000000-1111-2222-3333-444444444444 -veracryptBinary "C:\Program Files\VeraCrypt\VeraCrypt.exe"			 
+PS> .\vc.ps1 -itemId 00000000-1111-2222-3333-444444444444 -veracryptBinary "C:\Program Files\VeraCrypt\VeraCrypt.exe"			 
 
 .EXAMPLE
-PS> .\vs.ps1 -itemId 00000000-1111-2222-3333-444444444444 -interactive			 
+PS> .\vc.ps1 -itemId 00000000-1111-2222-3333-444444444444 -interactive			 
 
 .EXAMPLE
-PS> .\vs.ps1 -help
+PS> .\vc.ps1 -help
 #>
 [CmdletBinding(DefaultParameterSetName='AuthByKey')]
 param(
