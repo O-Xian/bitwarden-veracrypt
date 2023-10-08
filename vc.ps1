@@ -150,6 +150,8 @@ $vcHash=$item | jq.exe ".fields[] | select(.name == \`"Hash\`") | .value"
 
 $vcFile=$vcFile.replace("\\", "\")
 
+$pass='"' + $pass + '"'
+
 #########
 # Mount the volume
 #########
